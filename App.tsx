@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AdvocateRegisterScreen from './src/screens/AdvocateRegisterScreen';
 import ProfileSetupScreen from './src/screens/ProfileSetupScreen';
+import AppNavigator from "./src/navigation/AppNavigator";
 
 
 function App(): React.JSX.Element {
@@ -14,7 +15,8 @@ function App(): React.JSX.Element {
 
       <View style={styles.container}>
         {/* <AdvocateRegisterScreen /> */}
-        <ProfileSetupScreen />
+        {/* <ProfileSetupScreen /> */}
+        <AppNavigator />
       </View>
 
     </SafeAreaProvider>
