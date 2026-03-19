@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   View,
@@ -9,28 +8,39 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
 
 import colors from "../constants/colors";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 
 const AdvocateRegisterScreen = () => {
+  const navigation = useNavigation();
+
   const [name, setName] = useState("");
   const [barId, setBarId] = useState("");
   const [practice, setPractice] = useState("");
 
+  const handleRegister = () => {
+    // You can add validation here later
+    navigation.navigate("ProfileSetup");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       
+      {/* HEADER */}
       <View style={styles.header}>
-        <Text style={styles.title}>Advocated</Text>
+        <Text style={styles.title}>Advocacy</Text>
         <LanguageSwitcher />
       </View>
 
+      {/* FORM CARD */}
       <View style={styles.card}>
         <Text style={styles.heading}>
           Create Your Advocate Account
         </Text>
 
+        {/* FULL NAME */}
         <Text style={styles.label}>Full Name</Text>
         <TextInput
           placeholder="Full Name"
@@ -39,6 +49,7 @@ const AdvocateRegisterScreen = () => {
           onChangeText={setName}
         />
 
+        {/* BAR ID */}
         <Text style={styles.label}>State Bar Association ID</Text>
         <TextInput
           placeholder="State Bar Association ID"
@@ -47,7 +58,10 @@ const AdvocateRegisterScreen = () => {
           onChangeText={setBarId}
         />
 
-        <Text style={styles.label}>Primary Legal Practice Area</Text>
+        {/* PRACTICE AREA */}
+        <Text style={styles.label}>
+          Primary Legal Practice Area
+        </Text>
 
         <View style={styles.picker}>
           <Picker
@@ -62,15 +76,21 @@ const AdvocateRegisterScreen = () => {
           </Picker>
         </View>
 
-        <TouchableOpacity style={styles.button}>
+        {/* BUTTON */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleRegister}
+        >
           <Text style={styles.buttonText}>
             Authenticate and Register
           </Text>
         </TouchableOpacity>
       </View>
 
+      {/* LOGIN TEXT */}
       <Text style={styles.loginText}>
-        Already have an account? <Text style={styles.loginLink}>Log In</Text>
+        Already have an account?{" "}
+        <Text style={styles.loginLink}>Log In</Text>
       </Text>
 
     </SafeAreaView>
@@ -80,7 +100,7 @@ const AdvocateRegisterScreen = () => {
 export default AdvocateRegisterScreen;
 
 const styles = StyleSheet.create({
-
+  
   container: {
     flex: 1,
     backgroundColor: "#f4f6f8",
@@ -127,6 +147,7 @@ const styles = StyleSheet.create({
   picker: {
     backgroundColor: colors.inputBg,
     borderRadius: 12,
+    marginTop: 5,
   },
 
   button: {

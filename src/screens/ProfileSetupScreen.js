@@ -1,259 +1,281 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Switch,
-  Image,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+    StyleSheet,
+    View,
+    Text,
+    TouchableOpacity,
+    TextInput,
+    ScrollView,
+    Switch,
+    SafeAreaView,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather'; // Use @expo/vector-icons if using Expo
+import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ProfileSetupScreen() {
-  const navigation = useNavigation();
+import colors from "../constants/colors";
 
-  const [experience, setExperience] = useState("");
-  const [bio, setBio] = useState("");
-  const [advertise, setAdvertise] = useState(false);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
 
-        {/* HEADER */}
-        <View style={styles.header}>
-          <Text style={styles.title}>Advocacy</Text>
+const AdvocateProfileScreen = () => {
+    const [practice, setPractice] = useState("");
+    const [isEnabled, setIsEnabled] = useState(true);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-          <View style={styles.rightHeader}>
-            <View style={styles.lang}>
-              <Text style={styles.langText}>EN</Text>
-              <Text style={styles.langText}>HI</Text>
-              <Text style={styles.langText}>BN</Text>
+    return (
+        <SafeAreaView style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+
+                {/* Header / Profile Picture Area */}
+                <View style={styles.headerContainer}>
+                    <View style={styles.profileCircle}>
+                        <Icon name="user" size={60} color="#fff" />
+                    </View>
+                    <Text style={styles.uploadText}>Upload Profile Picture</Text>
+                </View>
+
+                {/* Form Container */}
+                <View style={styles.formCard}>
+                    <Text style={styles.sectionTitle}>Professional Bio & Card Setup</Text>
+
+                    <Text style={styles.label}>
+                        Primary Legal Practice Area
+                    </Text>
+
+                    <View style={styles.picker}>
+                        <Picker
+                            selectedValue={practice}
+                            onValueChange={(itemValue) => setPractice(itemValue)}
+                        >
+                            <Picker.Item label="Select Practice Area" value="" />
+                            <Picker.Item label="Criminal Law" value="criminal" />
+                            <Picker.Item label="Corporate Law" value="corporate" />
+                            <Picker.Item label="Family Law" value="family" />
+                            <Picker.Item label="Civil Law" value="civil" />
+                        </Picker>
+                    </View>
+
+                    <Text style={styles.label}>Years of Experience</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter years"
+                        keyboardType="numeric"
+                    />
+
+                    <Text style={styles.sectionTitle}>Digital Business Card</Text>
+
+                    <View style={styles.cardRow}>
+                        {/* The Mock Card */}
+                        <View style={styles.businessCard}>
+                            <Text style={styles.cardName}>Adv. Michael Chen</Text>
+                            <Text style={styles.cardSub}>Mock Name</Text>
+                            <View style={styles.cardBrand}>
+                                <Icon name="user" size={14} color="#1D3557" />
+                                <Text style={styles.brandText}>Advocacy</Text>
+                            </View>
+                        </View>
+
+                        <TouchableOpacity style={styles.generateButton}>
+                            <Text style={styles.generateButtonText}>Generate Card</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                {/* Advertising Toggle Card */}
+                <View style={styles.toggleCard}>
+                    <View>
+                        <Text style={styles.toggleTitle}>Advertise Your Card</Text>
+                        <Text style={styles.toggleSub}>Activate and Advertise Card</Text>
+                    </View>
+                    <Switch
+                        trackColor={{ false: "#767577", true: "#4ADE80" }}
+                        thumbColor={"#f4f3f4"}
+                        onValueChange={toggleSwitch}
+                        value={isEnabled}
+                    />
+                </View>
+
+            </ScrollView>
+
+            {/* Bottom Navigation Tab */}
+            <View style={styles.bottomTab}>
+                <TabItem icon="home" label="Home" />
+                <TabItem icon="briefcase" label="Practice" />
+                <TabItem icon="search" label="Client Search" />
+                <TabItem icon="user" label="Profile" active />
+                <TabItem icon="settings" label="Settings" />
             </View>
+        </SafeAreaView>
+    );
+};
 
-            <View style={styles.profileIcon} />
-          </View>
-        </View>
-
-        {/* PROFILE IMAGE */}
-        <View style={styles.profileSection}>
-          <TouchableOpacity style={styles.imageUpload}>
-            <Text style={styles.uploadText}>Upload Profile Picture</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* FORM CARD */}
-        <View style={styles.card}>
-
-          <Text style={styles.sectionTitle}>
-            Professional Bio & Card Setup
-          </Text>
-
-          {/* PRACTICE AREA */}
-          <Text style={styles.label}>Practice Areas</Text>
-          <TextInput
-            placeholder="Select Practice Areas"
-            style={styles.input}
-          />
-
-          {/* EXPERIENCE */}
-          <Text style={styles.label}>Years of Experience</Text>
-          <TextInput
-            placeholder="Enter years"
-            keyboardType="numeric"
-            value={experience}
-            onChangeText={setExperience}
-            style={styles.input}
-          />
-
-          {/* BIO */}
-          <Text style={styles.label}>Bio</Text>
-          <TextInput
-            placeholder="Write your bio"
-            value={bio}
-            onChangeText={setBio}
-            style={[styles.input, { height: 80 }]}
-            multiline
-          />
-
-          {/* DIGITAL CARD */}
-          <Text style={styles.sectionTitle}>Digital Business Card</Text>
-
-          <View style={styles.cardPreview}>
-            <Text style={styles.cardName}>Adv. Your Name</Text>
-            <Text style={styles.cardSub}>Your Specialization</Text>
-            <Text style={styles.cardType}>⚖️ Advocacy</Text>
-          </View>
-
-          {/* GENERATE BUTTON */}
-          <TouchableOpacity
-            style={styles.generateBtn}
-            onPress={() => navigation.replace("MainApp")}
-          >
-            <Text style={styles.generateText}>Generate Card</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* ADVERTISE TOGGLE */}
-        <View style={styles.advertiseBox}>
-          <View>
-            <Text style={styles.adTitle}>Advertise Your Card</Text>
-            <Text style={styles.adSub}>
-              Activate and Advertise Card
-            </Text>
-          </View>
-
-          <Switch
-            value={advertise}
-            onValueChange={setAdvertise}
-            trackColor={{ false: "#ccc", true: "#22c55e" }}
-            thumbColor={"#fff"}
-          />
-        </View>
-
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+const TabItem = ({ icon, label, active }) => (
+    <View style={styles.tabItem}>
+        <Icon name={icon} size={22} color={active ? '#1D3557' : '#999'} />
+        <Text style={[styles.tabLabel, active && styles.activeTabLabel]}>{label}</Text>
+    </View>
+);
 
 const styles = StyleSheet.create({
-
-  container: {
-    flex: 1,
-    backgroundColor: "#f3f4f6",
-    padding: 16,
-  },
-
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-  },
-
-  rightHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  lang: {
-    flexDirection: "row",
-    marginRight: 10,
-  },
-
-  langText: {
-    marginHorizontal: 5,
-    color: "#1e3a8a",
-    fontWeight: "600",
-  },
-
-  profileIcon: {
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-    backgroundColor: "#e5e7eb",
-  },
-
-  profileSection: {
-    alignItems: "center",
-    marginVertical: 20,
-  },
-
-  imageUpload: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    backgroundColor: "#1e3a8a",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  uploadText: {
-    color: "#fff",
-    textAlign: "center",
-  },
-
-  card: {
-    backgroundColor: "#d1fae5",
-    borderRadius: 20,
-    padding: 20,
-  },
-
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    marginBottom: 10,
-  },
-
-  label: {
-    marginTop: 10,
-    marginBottom: 5,
-    fontWeight: "500",
-  },
-
-  input: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 12,
-  },
-
-  cardPreview: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 15,
-    marginTop: 15,
-  },
-
-  cardName: {
-    fontWeight: "700",
-    fontSize: 16,
-  },
-
-  cardSub: {
-    color: "#555",
-  },
-
-  cardType: {
-    marginTop: 10,
-    fontWeight: "600",
-  },
-
-  generateBtn: {
-    backgroundColor: "#1e3a8a",
-    padding: 15,
-    borderRadius: 15,
-    marginTop: 20,
-  },
-
-  generateText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "600",
-  },
-
-  advertiseBox: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#e5e7eb",
-    padding: 20,
-    borderRadius: 20,
-    marginTop: 20,
-  },
-
-  adTitle: {
-    fontWeight: "700",
-  },
-
-  adSub: {
-    color: "#555",
-  },
-
+    container: {
+        flex: 1,
+        backgroundColor: '#F8F9FB',
+    },
+    scrollContent: {
+        paddingBottom: 100,
+    },
+    headerContainer: {
+        backgroundColor: '#1D3557',
+        height: 220,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+    },
+    profileCircle: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        backgroundColor: 'rgba(255,255,255,0.2)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#fff',
+    },
+    uploadText: {
+        color: '#fff',
+        fontWeight: '600',
+    },
+    formCard: {
+        backgroundColor: '#E6F4EA', // Light green tint
+        margin: 15,
+        borderRadius: 20,
+        padding: 20,
+        marginTop: -20,
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#000',
+        marginBottom: 15,
+        marginTop: 10,
+    },
+    label: {
+        fontSize: 14,
+        color: '#333',
+        marginBottom: 5,
+    },
+    dropdown: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 12,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 15,
+        borderWidth: 1,
+        borderColor: '#D1D1D1',
+    },
+    input: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 12,
+        marginBottom: 15,
+        borderWidth: 1,
+        borderColor: '#D1D1D1',
+    },
+    cardRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    businessCard: {
+        backgroundColor: '#fff',
+        padding: 15,
+        borderRadius: 15,
+        width: '55%',
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+    },
+    cardName: {
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+    cardSub: {
+        fontSize: 12,
+        color: '#888',
+        marginBottom: 10,
+    },
+    cardBrand: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    brandText: {
+        fontSize: 12,
+        marginLeft: 5,
+        fontWeight: 'bold',
+        color: '#1D3557',
+    },
+    generateButton: {
+        backgroundColor: '#1D3557',
+        paddingVertical: 12,
+        paddingHorizontal: 15,
+        borderRadius: 12,
+    },
+    generateButtonText: {
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: 12,
+    },
+    toggleCard: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        marginHorizontal: 15,
+        padding: 20,
+        borderRadius: 25,
+        elevation: 1,
+    },
+    toggleTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    toggleSub: {
+        fontSize: 12,
+        color: '#666',
+    },
+    bottomTab: {
+        position: 'absolute',
+        bottom: 0,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        paddingVertical: 10,
+        borderTopWidth: 1,
+        borderTopColor: '#eee',
+        justifyContent: 'space-around',
+        width: '100%',
+    },
+    tabItem: {
+        alignItems: 'center',
+    },
+    tabLabel: {
+        fontSize: 10,
+        color: '#999',
+        marginTop: 4,
+    },
+    activeTabLabel: {
+        color: '#1D3557',
+        fontWeight: '600',
+    },
+    picker: {
+        backgroundColor: colors.inputBg,
+        borderRadius: 12,
+        marginTop: 5,
+    },
 });
+
+export default AdvocateProfileScreen;
